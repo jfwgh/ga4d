@@ -1,11 +1,16 @@
 # ga4d
 Geometric Algebra for D
 
-The user is assumed to be familiar with Geometric Algebra (GA) and how it can be used in various areas of computer science.
+The user is assumed to be familiar with Geometric Algebra (GA) and how it can be used in various areas of computer science (3D engines and DSP in particular).
 
-This project aims to achieve the goal of performing efficient GA computations by leveraging D's powerful metaprogramming features.
+This project aims to achieve the goal of being able to perform GA computations efficiently by leveraging D's powerful metaprogramming features.
 
-Hopefully, we can arrive at a point where a 3D engine can leverage GA without having to tolerate performance shortcomings.
+## Details
+A GA is parameterized by an <i>n</i>-dimensional vector space over the real numbers. The GA is 2<sup><i>n</i></sup>-dimensional.
+
+A multivector (MV) may be represented in different ways including square matrices of dimension 2<sup><i>n</i></sup>, linked lists of non-zero 'basis blades', arrays (static or dynamic) or even SIMD types.
+
+For simplicity's sake, we choose to represent MVs using static arrays of floating-point numbers, generating code using scalar operations. (Generating SIMD code could be an ultimate goal).
 
 ## Generated code preview
 
