@@ -62,6 +62,11 @@ ret
 A similar result is obtained using dmd.
 
 ### Quaternions
+The basis for G<sup>0,2</sup> is { 1, <b>e<sub>1</sub></b>, <b>e<sub>2</sub></b>, <b>e<sub>12</sub></b> } = { 1, <b>i</b>, <b>j</b>, <b>k</b> } .
+
+For quaternion Q, Q[0] refers to the value of the '1' component (that is, the 'scalar part' of Q), Q[1] to the value of component <b>i</b>, etc.
+
+A quaternion with scalar part == 0 is termed 'pure imaginary'.
 
 ##### Generated code to multiply 2 quaternions q and r
 ```
@@ -71,14 +76,14 @@ qr[2] = (q[0]*r[2])-(q[1]*r[3])+(q[2]*r[0])+(q[3]*r[1]);
 qr[3] = (q[0]*r[3])+(q[1]*r[2])-(q[2]*r[1])+(q[3]*r[0]);
 ```
 
-##### Generated code to multiply quaternion q by quaternion v where v is 'pure imaginary' in that it has no scalar part
-
+##### Generated code to multiply quaternion q by quaternion v where v is pure imaginary.
 ```
 qv[0] = -(q[1]*v[0])-(q[2]*v[1])-(q[3]*v[2]);
 qv[1] = (q[0]*v[0])+(q[2]*v[2])-(q[3]*v[1]);
 qv[2] = (q[0]*v[1])-(q[1]*v[2])+(q[3]*v[0]);
 qv[3] = (q[0]*v[2])+(q[1]*v[1])-(q[2]*v[0]);
 ```
+Here, <b>v</b> has 3 components instead of 4; it's still a member of G<sup>0,2</sup> but has a a different _type_ from Q (think 'PureQuaternion' vs. 'Quaternion').
 
 ##### Let q and v be as above, and let p = [q[0], -q[1], -q[2], -q[3]], i.e., p == the Clifford conjugate of q
 ```
@@ -87,7 +92,8 @@ qvp[1] = ((-(q[1]*v[0])-(q[2]*v[1])-(q[3]*v[2]))*(-q[1]))+(((q[0]*v[0])+(q[2]*v[
 qvp[2] = ((-(q[1]*v[0])-(q[2]*v[1])-(q[3]*v[2]))*(-q[1]))+(((q[0]*v[0])+(q[2]*v[2])-(q[3]*v[1]))*(q[0]))+(((q[0]*v[1])-(q[1]*v[2])+(q[3]*v[0]))*(-q[3]))-(((q[0]*v[2])+(q[1]*v[1])-(q[2]*v[0]))*(-q[2]));
 qvp[3] = ((-(q[1]*v[0])-(q[2]*v[1])-(q[3]*v[2]))*(-q[3]))+(((q[0]*v[0])+(q[2]*v[2])-(q[3]*v[1]))*(-q[2]))-(((q[0]*v[1])-(q[1]*v[2])+(q[3]*v[0]))*(-q[1]))+(((q[0]*v[2])+(q[1]*v[1])-(q[2]*v[0]))*(q[0]));
 ```
-This computation comes up when we want to rotate vectors using normalized quaternions and their conjugates.
+This computation comes up when we want to rotate vectors using normalized quaternions and their conjugates. In this context, <b>v</b> can be interpreted as a 3D vector.
+
 It is worth noting that qvp[0] can only ever be = 0. Expanding, 
 ```
 qvp[0] =
