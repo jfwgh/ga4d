@@ -86,7 +86,7 @@ qv[1] = (q[0]*v[0])+(q[2]*v[2])-(q[3]*v[1]);
 qv[2] = (q[0]*v[1])-(q[1]*v[2])+(q[3]*v[0]);
 qv[3] = (q[0]*v[2])+(q[1]*v[1])-(q[2]*v[0]);
 ```
-Here, <b>v</b> has 3 components instead of 4; it's still a member of G<sup>0,2</sup> but has a a different _type_ from Q (think 'PureQuaternion' vs. 'Quaternion').
+Here, <b>v</b> has 3 components instead of 4; it's still a member of G<sup>0,2</sup> but has a a different _type_ from Q _(think 'PureQuaternion' vs. 'Quaternion')_.
 
 ##### Let q and v be as above, and let p = the Clifford conjugate of q
 p = [q[0], -q[1], -q[2], -q[3]]
@@ -108,5 +108,8 @@ qvp[0] =
 ```
 i.e., the positive and negative terms cancel.
 
-Thus qvp is automatically pure imaginary. Ideally, a code generator would realize this. It would skip the computation of qvp[0] and ensure that qvp is of type PureQuaternion.
+Thus qvp is automatically pure imaginary.
+
+##### Todo
+Ideally, a code generator would realize this. It would generate code that <b>skips the computation of qvp[0]</b> and ensure that qvp is a PureQuaternion.
 
