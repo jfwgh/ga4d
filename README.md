@@ -70,22 +70,22 @@ ab[2] = (a[1]*b[2])-(a[2]*b[1]);
 ```
 
 #### Regressive product
-A straightforward implementation of the regressive product in G3 might look like:
+A straightforward implementation of the regressive product of bivectors in G<sup>3</sup> could look like:
 ``` d
-auto regressiveProduct(A, B)(A a, B b)
+Vec3 regressiveProduct(Biv3 a, Biv3 b)
 {
   return ((a * _i3) ^ (b * _i3)) * i3; // i3 is the unit pseudoscalar of G3 and _i3 = -i3
 }
 ```
-but one should be concerned about the creation of temporaries and needless multiplies by -1 and 1.
+but this may create temporaries and involve needless multiplies by -1 and 1.
 
-##### Computing the regressive product of bivectors a and b, yielding vector m
+On the other hand, the current code generator sidesteps those concerns and produces this code:
 ``` d
 m[0] = -(((((a[1]*(-1)))*(-(b[0]*(-1))))-((-(a[0]*(-1)))*((b[1]*(-1)))))*(1));
 m[1] = ((((-(a[2]*(-1)))*(-(b[0]*(-1))))-((-(a[0]*(-1)))*(-(b[2]*(-1)))))*(1));
 m[2] -((((-(a[2]*(-1)))*((b[1]*(-1))))-(((a[1]*(-1)))*(-(b[2]*(-1)))))*(1));
 ```
-This looks gross. However, ldc generates the following code with the -O flag set:
+which is admittedly unpleasant to look at. However, ldc converts the above source code to the following asm code with the -O flag set:
 ```
 movq    rax, xmm2
 movd    xmm2, eax
