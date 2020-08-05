@@ -147,7 +147,7 @@ qvp[1] = ((-(q[1]*v[0])-(q[2]*v[1])-(q[3]*v[2]))*(-q[1]))+(((q[0]*v[0])+(q[2]*v[
 qvp[2] = ((-(q[1]*v[0])-(q[2]*v[1])-(q[3]*v[2]))*(-q[1]))+(((q[0]*v[0])+(q[2]*v[2])-(q[3]*v[1]))*(q[0]))+(((q[0]*v[1])-(q[1]*v[2])+(q[3]*v[0]))*(-q[3]))-(((q[0]*v[2])+(q[1]*v[1])-(q[2]*v[0]))*(-q[2]));
 qvp[3] = ((-(q[1]*v[0])-(q[2]*v[1])-(q[3]*v[2]))*(-q[3]))+(((q[0]*v[0])+(q[2]*v[2])-(q[3]*v[1]))*(-q[2]))-(((q[0]*v[1])-(q[1]*v[2])+(q[3]*v[0]))*(-q[1]))+(((q[0]*v[2])+(q[1]*v[1])-(q[2]*v[0]))*(q[0]));
 ```
-This sort of computation arises when we want to rotate or reflect 3D vectors using normalized quaternions and their conjugates. In this context, <b>v</b> can be interpreted as a 3D vector.
+This sort of computation arises when we want to rotate or reflect 3D vectors using normalized quaternions and their conjugates and is sometimes referred to as a 'sandwiching operation'. In this context, <b>v</b> can be interpreted as a 3D vector.
 
 It is worth noting that qvp[0] can only ever be = 0. Expanding, 
 ``` d
@@ -157,8 +157,10 @@ qvp[0] =
 (q[0] * v[1] * q[2]) - (q[1] * v[2] * q[2]) + (q[3] * v[0] * q[2]) +
 (q[0] * v[2] * q[3]) + (q[1] * v[1] * q[3]) - (q[2] * v[0] * q[3]));
 ```
-The positive and negative terms cancel, and thus qvp is pure imaginary by default.
+The positive and negative terms cancel, so qvp is pure imaginary by default.
 
 ##### Todo
-Ideally, a code generator would realize this. It would generate code that <b>skips the computation of qvp[0]</b> and ensure that qvp is a PureQuaternion.
+Ideally, a code generator would realize this. It would generate code that
+1. skips the computation of qvp[0]
+2. ensures that qvp is a PureQuaternion (i.e., developed on { <b>i</b>, <b>j</b>, <b>k</b> } rather than the entire basis).
 
