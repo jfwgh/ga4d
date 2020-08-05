@@ -120,7 +120,7 @@ The basis for G<sup>0,2</sup> is { 1, <b>e<sub>1</sub></b>, <b>e<sub>2</sub></b>
 
 For quaternion Q, Q[0] refers to the value of the '1' component (that is, the 'scalar part' of Q), Q[1] to the value of component <b>i</b>, etc.
 
-A quaternion with scalar part == 0 is termed 'pure imaginary'.
+A quaternion with scalar part == 0 is termed 'pure imaginary'. As shown below, this can be sometimes interpreted as a 3D vector.
 
 ##### Computing the product of quaternions q and r
 ``` d
@@ -137,7 +137,7 @@ qv[1] = (q[0]*v[0])+(q[2]*v[2])-(q[3]*v[1]);
 qv[2] = (q[0]*v[1])-(q[1]*v[2])+(q[3]*v[0]);
 qv[3] = (q[0]*v[2])+(q[1]*v[1])-(q[2]*v[0]);
 ```
-Here, <b>v</b> has 3 components instead of 4; it's still a member of G<sup>0,2</sup> but has a a different _type_ from Q _(think 'PureQuaternion' vs. 'Quaternion')_.
+Here, <b>v</b> has 3 components instead of 4; it's still a member of G<sup>0,2</sup> but is described in terms of the sub-basis { <b>i</b>, <b>j</b>, <b>k</b> } .
 
 ##### Let q and v be as above, and let p = the Clifford conjugate of q
 It is the case that p = [q[0], -q[1], -q[2], -q[3]] .
@@ -147,7 +147,7 @@ qvp[1] = ((-(q[1]*v[0])-(q[2]*v[1])-(q[3]*v[2]))*(-q[1]))+(((q[0]*v[0])+(q[2]*v[
 qvp[2] = ((-(q[1]*v[0])-(q[2]*v[1])-(q[3]*v[2]))*(-q[1]))+(((q[0]*v[0])+(q[2]*v[2])-(q[3]*v[1]))*(q[0]))+(((q[0]*v[1])-(q[1]*v[2])+(q[3]*v[0]))*(-q[3]))-(((q[0]*v[2])+(q[1]*v[1])-(q[2]*v[0]))*(-q[2]));
 qvp[3] = ((-(q[1]*v[0])-(q[2]*v[1])-(q[3]*v[2]))*(-q[3]))+(((q[0]*v[0])+(q[2]*v[2])-(q[3]*v[1]))*(-q[2]))-(((q[0]*v[1])-(q[1]*v[2])+(q[3]*v[0]))*(-q[1]))+(((q[0]*v[2])+(q[1]*v[1])-(q[2]*v[0]))*(q[0]));
 ```
-This sort of computation arises when we want to rotate or reflect 3D vectors using normalized quaternions and their conjugates and is sometimes referred to as a 'sandwiching operation'. In this context, <b>v</b> can be interpreted as a 3D vector.
+This sort of computation arises when we want to rotate or reflect 3D vectors using normalized quaternions and their conjugates (in the context of 3D rotors, this is sometimes referred to as a 'sandwiching operation').
 
 It is worth noting that qvp[0] can only ever be = 0. Expanding, 
 ``` d
@@ -160,7 +160,7 @@ qvp[0] =
 The positive and negative terms cancel, so qvp is pure imaginary by default.
 
 ##### Todo
-Ideally, a code generator would realize this. It would generate code that
-1. skips the computation of qvp[0]
-2. ensures that qvp is a PureQuaternion (i.e., developed on { <b>i</b>, <b>j</b>, <b>k</b> } rather than the entire basis).
+Ideally, a code generator would recognize these sorts of patterns and generate code that
+1. skips the computation of elements such as qvp[0] that are known to be algebraically (read: _statically_) equal to zero regardless of the presence of floating-point operations
+2. avoids reserving storage space for such elements in the result.
 
